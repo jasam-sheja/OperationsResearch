@@ -1,9 +1,7 @@
 /*
-للتعامل مع simplexContainer يجب تحويل المسألة إلى max z و المتراجحات إلى أصغر أو يساوي حتى لو كانت القيم اليمينية أصغر من الصفر ثم إدخال الz و المتراجات بالترتيب دون المتغيرات الإضافية
-بالطبع هذا أدنى مستوى من طرق الإدخال
-
-الخرج هو الجدول النهائي دون المتغيرات الإضافية
-ترتيب المتغيرات يدل عليه slack variable وشكراً
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 
 package simplex;
@@ -12,7 +10,7 @@ package simplex;
  *
  * @author DigitalNet
  */
-public class simplex {
+public class Simplex {
 
     /**
      * @param args the command line arguments
@@ -24,8 +22,10 @@ public class simplex {
 //        t = new double[][]{{3,2,1,0},{-3,-1,-1,-3},{3,-3,-1,-6},{1,1,1,3}};
 //        t = new double[][]{{-1,1,0},{-1,-2,-10},{2,1,20}};
 //        t = new double[][]{{-1,-1,0},{-1,-2,-10},{2,1,20}};
-        t = new double[][]{{1,1,0},{-1,-2,-10},{2,1,20}};
-        simplexContainer sc = new simplexContainer(t);
+//        t = new double[][]{{1,1,0},{-1,-2,-10},{2,1,20}};
+//        simplexContainer sc = new simplexContainer(t,'0');
+        t = new double[][]{{-3,1,1,0,-1},{1,-2,1,11,-1},{-4,1,2,3,1},{-2,0,1,1,0}};
+        simplexContainer sc = new simplexContainer(t,'f');
         System.out.println(sc);
         String st = "\nslacks = \n";
         for(int i=0;i<sc.getSlacksCount();i++){
