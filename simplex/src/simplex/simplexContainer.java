@@ -4,7 +4,7 @@ package simplex;
  *
  * @author DigitalNet solving for max z
  */
-class simplexContainer {
+public class simplexContainer {
     /*
      i indecates a row 
      j indecates a coulom
