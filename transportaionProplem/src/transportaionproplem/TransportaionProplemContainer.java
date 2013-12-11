@@ -67,7 +67,7 @@ public class TransportaionProplemContainer {
         this.setC(c); 
         this.setA(a);
         this.setB(b);
-        this.setX(BeginingSolution.NorthWestCorner(c, a, b));
+        this.setX(TransportationProblemHelper.BeginingSolution.NorthWestCorner(c, a, b));
     }
     
     public int getN(){
@@ -159,70 +159,144 @@ public class TransportaionProplemContainer {
     }
 
     private void findCBar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TransportationProblemHelper.CBarFinder cbf = new TransportationProblemHelper.CBarFinder(getM(), getN(),c,x);
+        minCBarValue = Double.NaN;
+        minCBarI = -1;
+        minCBarJ = -1;
+        for(int i=0;i<getM();i++){
+            for(int j=0;j<getN();j++){
+                if(x[i][j] == Double.NaN){
+                    double cBar = c[i][j]-cbf.getU(i)-cbf.getV(j);
+                    if(cBar<getMinCBarValue()){
+                        setMinCBarValue(cBar);
+                        setMinCBarI(i);
+                        setMinCBarJ(j);
+                    }                   
+                }
+            }
+        }
     }
     
 }
-class BeginingSolution{
-    public static double[][]NorthWestCorner(double[][] c,double []a,double []b){
-        double [][] result;
-        result = new double[c.length ][c[0].length];
-        int numberOfBasicV = 0 ;
-        int i = 0 ;
-        int j = 0 ;
-        for (int k = 0; k < 10; k++) {
-            for (int l = 0; l < 10; l++) {
-               result[k][l] =Double.NaN ;
-            }
-        }
-        while(i <c.length ){
-            while (j<c[0].length){
-                if (a[i]<b[j]){
-                    result[i][j]=a[i] ; 
-                    b[j]-=a[i] ;
-                    a[i]=0;
-                    i++ ;
-                    numberOfBasicV++ ;
+class TransportationProblemHelper{
+    public static class BeginingSolution{
+        public static double[][]NorthWestCorner(double[][] c,double []a,double []b){
+            double [][] result;
+            result = new double[c.length ][c[0].length];
+            int numberOfBasicV = 0 ;
+            int i = 0 ;
+            int j = 0 ;
+            for (int k = 0; k < 10; k++) {
+                for (int l = 0; l < 10; l++) {
+                   result[k][l] =Double.NaN ;
                 }
-                else{
-                    result[i][j]=b[j];
-                    a[i]-=b[j];
-                    b[j]=0;
-                    j++ ;
-                    numberOfBasicV++ ;
-                    if (a[i]==0)
-                        i++;
-                
-                }
-            
             }
-        
-        }
-        i = 0 ;  j= 0 ; 
-        while (numberOfBasicV<(c.length + c[0].length -1)){
-            
-            boolean done =false ;
-            while ( (!done) && (i <c.length ) ){
-                while((!done)&&(j < c[0].length)){
-                    if (result[i][j] == Double.NaN){
-                        result[i][j]=0 ;
+            while(i <c.length ){
+                while (j<c[0].length){
+                    if (a[i]<b[j]){
+                        result[i][j]=a[i] ; 
+                        b[j]-=a[i] ;
+                        a[i]=0;
+                        i++ ;
                         numberOfBasicV++ ;
-                        done=true ;
                     }
-                    j++;
+                    else{
+                        result[i][j]=b[j];
+                        a[i]-=b[j];
+                        b[j]=0;
+                        j++ ;
+                        numberOfBasicV++ ;
+                        if (a[i]==0)
+                            i++;
+
+                    }
+
                 }
-                i++ ;
+
+            }
+            i = 0 ;  j= 0 ; 
+            while (numberOfBasicV<(c.length + c[0].length -1)){
+
+                boolean done =false ;
+                while ( (!done) && (i <c.length ) ){
+                    while((!done)&&(j < c[0].length)){
+                        if (result[i][j] == Double.NaN){
+                            result[i][j]=0 ;
+                            numberOfBasicV++ ;
+                            done=true ;
+                        }
+                        j++;
+                    }
+                    i++ ;
+                }
+            }
+
+
+            return result ;
+        }
+        public static double[][]MinimomCoast(double[][] c,double []a,double []b){
+            throw new UnsupportedOperationException("yet to be implemented");
+        }
+
+        public static double[][]voagle(double[][] c,double []a,double []b){
+            throw new UnsupportedOperationException("yet to be implemented");
+        }
+    }
+    public static class CBarFinder{
+        private final double []u ;
+        private final double []v ;
+
+        private final double[][]x;
+        private final double[][]c;
+        
+        public double[] getU(){
+            return u;
+        }
+        public double[] getV(){
+            return v;
+        }
+        public double getU(int index){
+            return u[index];
+        }
+        public double getV(int index){
+            return v[index];
+        }
+        public CBarFinder(int un, int vn,double[][] c,double[][] x) {
+            this.u = nanValues(un);
+            this.v = nanValues(vn);
+            this.x = x;
+            this.c = c;
+            solve();
+        }
+        
+        private double[] nanValues(int length){
+            double []rslt = new double[length];
+            for(int i=0;i<rslt.length;i++){
+                rslt[i] = Double.NaN;
+            }
+            return rslt;
+        }
+        
+        private void solve(){
+            v[0]=0;
+            findU(0);       
+        }
+        private void findU(int index){
+            for(int i=0;i<u.length;i++){
+                if(u[i]==Double.NaN && x[i][index]!=Double.NaN){
+                    u[i] = c[i][index] - v[index];
+                    findV(i);
+                }
             }
         }
-            
-       
-        return result ;
-    }
-    public static double[][]MinimomCoast(double[][] c,double []a,double []b){
-        throw new UnsupportedOperationException("yet to be implemented");
-    }
-    
-    public static double[][]voagle(double[][] c,double []a,double []b){
-        throw new UnsupportedOperationException("yet to be implemented");
+        private void findV(int index){
+            for(int j=0;j<v.length;j++){
+                if(v[j]==Double.NaN && x[index][j]!=Double.NaN){
+                    v[j] = c[index][j] - u[index];
+                    findU(j);
+                }
+            }
+        }
+        
     }
 }
