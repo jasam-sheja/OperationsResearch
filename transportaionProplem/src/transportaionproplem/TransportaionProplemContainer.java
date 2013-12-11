@@ -172,7 +172,7 @@ class BeginingSolution{
         int j = 0 ;
         for (int k = 0; k < 10; k++) {
             for (int l = 0; l < 10; l++) {
-               result[k][l] =-1 ;
+               result[k][l] =Double.NaN ;
             }
         }
         while(i <c.length ){
@@ -204,7 +204,7 @@ class BeginingSolution{
             boolean done =false ;
             while ( (!done) && (i <c.length ) ){
                 while((!done)&&(j < c[0].length)){
-                    if (result[i][j] == -1){
+                    if (result[i][j] == Double.NaN){
                         result[i][j]=0 ;
                         numberOfBasicV++ ;
                         done=true ;
