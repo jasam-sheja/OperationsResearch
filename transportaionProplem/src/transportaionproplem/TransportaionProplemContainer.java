@@ -167,6 +167,7 @@ class BeginingSolution{
     public static double[][]NorthWestCorner(double[][] c,double []a,double []b){
         double [][] result;
         result = new double[c.length ][c[0].length];
+        int numberOfBasicV = 0 ;
         int i = 0 ;
         int j = 0 ;
         for (int k = 0; k < 10; k++) {
@@ -181,12 +182,14 @@ class BeginingSolution{
                     b[j]-=a[i] ;
                     a[i]=0;
                     i++ ;
+                    numberOfBasicV++ ;
                 }
                 else{
                     result[i][j]=b[j];
                     a[i]-=b[j];
                     b[j]=0;
                     j++ ;
+                    numberOfBasicV++ ;
                     if (a[i]==0)
                         i++;
                 
@@ -195,6 +198,22 @@ class BeginingSolution{
             }
         
         }
+        if (numberOfBasicV<i+j-1){
+            i = 0 ;  j= 0 ; 
+            boolean done =false ;
+            while ( (!done) && (i <c.length ) ){
+                while((!done)&&(j < c[0].length)){
+                    if (result[i][j] == -1){
+                        result[i][j]=0 ;
+                        done=true ;
+                    }
+                    j++;
+                }
+                i++ ;
+            }
+        }
+            
+       
         return result ;
     }
     public static double[][]MinimomCoast(double[][] c,double []a,double []b){
