@@ -198,13 +198,15 @@ class BeginingSolution{
             }
         
         }
-        if (numberOfBasicV<i+j-1){
-            i = 0 ;  j= 0 ; 
+        i = 0 ;  j= 0 ; 
+        while (numberOfBasicV<(c.length + c[0].length -1)){
+            
             boolean done =false ;
             while ( (!done) && (i <c.length ) ){
                 while((!done)&&(j < c[0].length)){
                     if (result[i][j] == -1){
                         result[i][j]=0 ;
+                        numberOfBasicV++ ;
                         done=true ;
                     }
                     j++;
