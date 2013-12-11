@@ -165,7 +165,37 @@ public class TransportaionProplemContainer {
 }
 class BeginingSolution{
     public static double[][]NorthWestCorner(double[][] c,double []a,double []b){
-        throw new UnsupportedOperationException("yet to be implemented");
+        double [][] result;
+        result = new double[c.length ][c[0].length];
+        int i = 0 ;
+        int j = 0 ;
+        for (int k = 0; k < 10; k++) {
+            for (int l = 0; l < 10; l++) {
+               result[k][l] =-1 ;
+            }
+        }
+        while(i <c.length ){
+            while (j<c[0].length){
+                if (a[i]<b[j]){
+                    result[i][j]=a[i] ; 
+                    b[j]-=a[i] ;
+                    a[i]=0;
+                    i++ ;
+                }
+                else{
+                    result[i][j]=b[j];
+                    a[i]-=b[j];
+                    b[j]=0;
+                    j++ ;
+                    if (a[i]==0)
+                        i++;
+                
+                }
+            
+            }
+        
+        }
+        return result ;
     }
     public static double[][]MinimomCoast(double[][] c,double []a,double []b){
         throw new UnsupportedOperationException("yet to be implemented");
