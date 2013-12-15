@@ -1,13 +1,15 @@
 
 package transportaionproplem;
 
+import java.util.ArrayList;
+
 
 /**
  *
  * @author DigitalNet
  */
 public class TransportaionProplemContainer {
-    
+    private final TransportationProblemHelper tph = new TransportationProblemHelper();
     private double[][] c;
 
     /**
@@ -67,7 +69,7 @@ public class TransportaionProplemContainer {
         this.setC(c); 
         this.setA(a);
         this.setB(b);
-        this.setX(TransportationProblemHelper.BeginingSolution.NorthWestCorner(c, a, b));
+        this.setX(tph.new BeginingSolution().NorthWestCorner(c, a, b));
     }
     
     public int getN(){
@@ -80,13 +82,28 @@ public class TransportaionProplemContainer {
     public boolean findOptimal(){
         if(!this.isFeasable()) return false;
         while(!this.isOptimal()){
-            pivotCBar();
+            try{
+                pivotCBar();
+            }
+            catch(Exception e){
+                System.err.println(e.getMessage());
+                System.err.println(e.getStackTrace());
+                return false;
+            }
         }
         return true;
     }
 
     private boolean isFeasable() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int sumA = 0;
+        for(int i=0;i<getM();i++){
+            sumA += a[i];
+        }
+        int sumB = 0;
+        for(int j=0;j<getN();j++){
+            sumB += b[j];
+        }
+        return sumA == sumB;
     }
 
     private boolean isOptimal() {
@@ -154,8 +171,13 @@ public class TransportaionProplemContainer {
         this.minCBarValue = minCBarValue;
     }
 
-    private void pivotCBar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void pivotCBar()throws Exception {
+        int []ij = tph.new CirculeFinder(x, minCBarI, minCBarJ, minCBarValue).findCircule();
+        double mu = Math.min(x[ij[0]][minCBarJ], x[minCBarI][ij[1]]);
+        x[minCBarI][minCBarJ] = minCBarValue+mu;
+        x[ij[0]][ij[1]] += mu;
+        x[minCBarI][ij[1]] = (x[minCBarI][ij[1]]==mu?Double.NaN:x[minCBarI][ij[1]]-mu); 
+        x[ij[0]][minCBarI] = (x[ij[0]][minCBarI]==mu?Double.NaN:x[ij[0]][minCBarI]-mu);
     }
 
     private void findCBar() {
@@ -179,8 +201,8 @@ public class TransportaionProplemContainer {
     
 }
 class TransportationProblemHelper{
-    public static class BeginingSolution{
-        public static double[][]NorthWestCorner(double[][] c,double []a,double []b){
+    public class BeginingSolution{
+        public double[][]NorthWestCorner(double[][] c,double []a,double []b){
             double [][] result;
             result = new double[c.length ][c[0].length];
             int numberOfBasicV = 0 ;
@@ -234,11 +256,10 @@ class TransportationProblemHelper{
 
             return result ;
         }
-        public static double[][]MinimomCoast(double[][] c,double []a,double []b){
+        public double[][]MinimomCoast(double[][] c,double []a,double []b){
             throw new UnsupportedOperationException("yet to be implemented");
         }
-
-        public static double[][]voagle(double[][] c,double []a,double []b){
+        public double[][]voagle(double[][] c,double []a,double []b){
             throw new UnsupportedOperationException("yet to be implemented");
         }
     }
@@ -294,6 +315,53 @@ class TransportationProblemHelper{
                 if(v[j]==Double.NaN && x[index][j]!=Double.NaN){
                     v[j] = c[index][j] - u[index];
                     findU(j);
+                }
+            }
+        }
+        
+    }
+    public class CirculeFinder{
+        private  ArrayList<Integer> row;
+        private  ArrayList<Integer> column;
+        private final double[][] x;
+        private final int minCBarI;
+        private final int minCBarJ;
+        private final double minCBarValue;
+
+        public CirculeFinder(double[][] x, int minCBarI, int minCBarJ, double minCBarValue) {
+            this.x = x;
+            this.minCBarI = minCBarI;
+            this.minCBarJ = minCBarJ;
+            this.minCBarValue = minCBarValue;
+        }
+        
+        /*
+        *return two corners of the cirule that contain minCBar
+        *the first row contain i of the corners
+        *the second row contain j of the corners
+        */
+        public int[] findCircule()throws Exception{
+            findRow();
+            findColumn();
+            for (Integer j : row) {
+                for (Integer i : column) {
+                    if(x[i][j]!=Double.NaN)
+                        return new int[]{i,j};
+                }
+            }
+            throw new Exception("no circule was found");
+        }
+        private void findRow(){
+            for(int j=0;j<x[0].length;j++){
+                if(x[minCBarI][j]!=Double.NaN && x[minCBarI][j]>=minCBarValue){
+                    row.add(j);
+                }
+            }
+        }
+        private void findColumn(){
+            for(int i=0;i<x.length;i++){
+                if(x[i][minCBarI]!=Double.NaN && x[i][minCBarI]>=minCBarValue){
+                    column.add(i);
                 }
             }
         }
