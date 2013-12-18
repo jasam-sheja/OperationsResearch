@@ -219,7 +219,7 @@ public class TransportaionProplemContainer {
         if(zeros.size()<2){
             x[zeros.getFirst()[0]][zeros.getFirst()[1]] = Double.NaN;
         }
-        else
+        else if(ismin)
         {
             int[] max = zeros.getFirst();
             for (int[] is : zeros) {
@@ -233,28 +233,30 @@ public class TransportaionProplemContainer {
                     x[is[0]][is[1]]=0;
             }
         }
+        else
+        {
+            int[] min = zeros.getFirst();
+            for (int[] is : zeros) {
+                if(c[min[0]][min[1]] > c[is[0]][is[1]]){
+                    min = is;
+                }
+            }
+            x[min[0]][min[1]] = Double.NaN;
+            for(int[] is:zeros){
+                if(is != min)
+                    x[is[0]][is[1]]=0;
+            }
+        }
     }
     private double findMu(LinkedList<int[]> ll){
         double mu;
-        if(ismin){
-             mu = Double.MAX_VALUE;
-            boolean minus = true;
-            for (int[] is : ll) {
-                if(minus)
-                    mu = Math.min(mu, x[is[0]][is[1]]);
-                minus = !minus;
-            }            
-        }
-        else
-        {
-            mu = Double.MIN_VALUE;
-            boolean minus = true;
-            for (int[] is : ll) {
-                if(minus)
-                    mu = Math.max(mu, x[is[0]][is[1]]);
-                minus = !minus;
-            }   
-        }
+        mu = Double.MAX_VALUE;
+        boolean minus = true;
+        for (int[] is : ll) {
+            if(minus)
+                mu = Math.min(mu, x[is[0]][is[1]]);
+            minus = !minus;
+        }             
         return mu;
     }
     private void findMinCBar() {
