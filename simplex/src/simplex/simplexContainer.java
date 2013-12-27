@@ -329,7 +329,7 @@ public class simplexContainer {
         String st = "";
         for (double[] row : table) {
             for (double element : row) {
-                st += "\t" + element;
+                st += "  \t" + element;
             }
             st += "\n";
         }
