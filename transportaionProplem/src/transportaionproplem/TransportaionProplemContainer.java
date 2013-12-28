@@ -399,6 +399,7 @@ class TransportationProblemHelper{
                     j=0 ;
                     i++ ;
                 }
+               
                 if ((a[iLow]<b[jLow])&&(! Double.isNaN(theLowestCost)))
                 {
                     result[iLow][jLow] = a[iLow];
@@ -421,6 +422,8 @@ class TransportationProblemHelper{
                 
                 if ((i==c.length)&&(j==c[0].length)&&(Double.isNaN(theLowestCost)))
                     break ;
+                i = 0 ;
+                j= 0 ;
             
             }
             return result ;
