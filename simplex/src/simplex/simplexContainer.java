@@ -119,29 +119,37 @@ public class simplexContainer {
     }
 
     private boolean isBounded() {
-        for (int j = 0; j < table[0].length - 1; j++) {
+        int n=0,//number of variables that have slack to get out
+                sn=0;//number of variables that could be in
+        for (int j = 0; j < getVariablesCount(); j++) {
             if (couldBeIn(j)) {
-                for (int i = 1; i < table.length; i++) {
-                    if (table[i][j] > 0) {
-                        return true;
+                sn++;
+                for (int i = 0; i < getSlacksCount(); i++) {
+                    if (table[i+1][j] > 0) {
+                        n++;
+                        break;
                     }
                 }
             }
         }
-        return false;
+        return n == sn;
     }
 
     private boolean isDualBounded() {
-        for (int i = 1; i < getSlacksCount() + 1; i++) {
+        int n=0,//number of slacks that have variable to get in
+                vn = 0;//number of slack that could be out
+        for (int i = 0; i < getSlacksCount(); i++) {
             if (couldBeOut(i)) {
+                vn++;
                 for (int j = 0; j < getVariablesCount(); j++) {
-                    if (table[i][j] < 0) {
-                        return true;
+                    if (table[i+1][j] < 0) {
+                        n++;
+                        break;
                     }
                 }
             }
         }
-        return false;
+        return n == vn;
     }
     /*
      use only with primal fucntions
@@ -155,7 +163,7 @@ public class simplexContainer {
      use only with dual functions
      */
     private boolean couldBeOut(int i) {
-        return (table[i][table[i].length - 1] < 0);
+        return (table[i+1][table[i+1].length - 1] < 0);
     }
     /*
      there could be an optimal value
@@ -326,9 +334,16 @@ public class simplexContainer {
 
     @Override
     public String toString() {
-        String st = "";
-        for (double[] row : table) {
-            for (double element : row) {
+        String st = "  \t";
+        for(double element : variables)
+            st += "  \t" + element;
+        st += "\n";
+        for (int i=0;i<table.length;i++) {
+            if(i>0)
+                st += slacks[i-1]+"|";
+            else
+                st += "  \t";
+            for (double element : table[i]) {
                 st += "  \t" + element;
             }
             st += "\n";
