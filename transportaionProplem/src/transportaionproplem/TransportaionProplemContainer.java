@@ -389,7 +389,7 @@ class TransportationProblemHelper{
                
                 while(i <c.length ){
                     while (j<c[0].length){
-                        if (((c[i][j]<theLowestCost )||(theLowestCost== Double.NaN))&&(a[i]!=0)&&(b[j]!=0)){
+                        if (((c[i][j]<theLowestCost )||(Double.isNaN(theLowestCost)))&&(a[i]!=0)&&(b[j]!=0)){
                             theLowestCost = c[i][j] ;
                             iLow = i ;
                             jLow = j ;
@@ -399,23 +399,27 @@ class TransportationProblemHelper{
                     j=0 ;
                     i++ ;
                 }
-                if ((a[iLow]<b[jLow])&&(theLowestCost !=Double.NaN))
+                if ((a[iLow]<b[jLow])&&(! Double.isNaN(theLowestCost)))
                 {
                     result[iLow][jLow] = a[iLow];
                     b[jLow]-=a[iLow] ;
                     a[iLow] = 0 ;
                     numberOfBasicV++ ;
+                    theLowestCost = Double.NaN ;
                 }
-                else if ((b[jLow]<a[iLow])&&(theLowestCost != Double.NaN))
+                else if ((b[jLow]<a[iLow])&&(! Double.isNaN(theLowestCost)))
                 {
                     result[iLow][jLow] = b[jLow];
                     a[iLow]-=b[jLow] ;
                     b[jLow]=0 ;
                     numberOfBasicV++ ;
+                    theLowestCost = Double.NaN ;
                             
                 }
                 
-                if ((i==c.length)&&(j==c[0].length)&&(theLowestCost==Double.NaN))
+              
+                
+                if ((i==c.length)&&(j==c[0].length)&&(Double.isNaN(theLowestCost)))
                     break ;
             
             }
