@@ -4,6 +4,7 @@ package transportaionproplem;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import javax.management.BadAttributeValueExpException;
 
@@ -373,11 +374,59 @@ class TransportationProblemHelper{
             return result;
         }
         public static double[][]MinimomCoast(double[][] c,double []a,double []b){
-            throw new UnsupportedOperationException("yet to be implemented");
+            double [][] result;
+            int numberOfBasicV;
+            int numberOfBasicToBe;
+            double theLowestCost = Double.NaN ;
+            int iLow = 0 ,jLow = 0 ;
+            result = nanValue(c.length, c[0].length);
+            numberOfBasicV = 0 ;
+            
+            numberOfBasicToBe = c.length + c[0].length -1;
+            int i = 0 ;
+            int j = 0 ;
+            while (true){
+               
+                while(i <c.length ){
+                    while (j<c[0].length){
+                        if (((c[i][j]<theLowestCost )||(theLowestCost== Double.NaN))&&(a[i]!=0)&&(b[j]!=0)){
+                            theLowestCost = c[i][j] ;
+                            iLow = i ;
+                            jLow = j ;
+                        }
+                        j++ ;
+                    }
+                    j=0 ;
+                    i++ ;
+                }
+                if ((a[iLow]<b[jLow])&&(theLowestCost !=Double.NaN))
+                {
+                    result[iLow][jLow] = a[iLow];
+                    b[jLow]-=a[iLow] ;
+                    a[iLow] = 0 ;
+                    numberOfBasicV++ ;
+                }
+                else if ((b[jLow]<a[iLow])&&(theLowestCost != Double.NaN))
+                {
+                    result[iLow][jLow] = b[jLow];
+                    a[iLow]-=b[jLow] ;
+                    b[jLow]=0 ;
+                    numberOfBasicV++ ;
+                            
+                }
+                
+                if ((i==c.length)&&(j==c[0].length)&&(theLowestCost==Double.NaN))
+                    break ;
+            
+            }
+            return result ;
+            
         }
         public static double[][]voagle(double[][] c,double []a,double []b){
             throw new UnsupportedOperationException("yet to be implemented");
         }
+
+        
     }
     private static double[] nanValues(int length){
             double []rslt = new double[length];
