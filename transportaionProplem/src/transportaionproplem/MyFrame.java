@@ -6,6 +6,7 @@
 
 package transportaionproplem;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -22,6 +23,7 @@ public class MyFrame extends javax.swing.JFrame {
      */
     public MyFrame() {
         initComponents();
+        groupButton();
     }
 
     /**
@@ -148,6 +150,7 @@ public class MyFrame extends javax.swing.JFrame {
         jRadioButton4.setText("minimom coast way");
 
         jRadioButton5.setText("vogial way");
+        jRadioButton5.setToolTipText("not supported yet");
         jRadioButton5.setEnabled(false);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -215,6 +218,15 @@ public class MyFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void  groupButton(){
+        ButtonGroup gb1 = new ButtonGroup();
+        gb1.add(jRadioButton1);
+        gb1.add(jRadioButton2);
+        ButtonGroup gb2 = new ButtonGroup();
+        gb2.add(jRadioButton3);
+        gb2.add(jRadioButton4);
+        gb2.add(jRadioButton5);
+    }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try{
             sorcesCount = Integer.parseInt(jTextField1.getText());

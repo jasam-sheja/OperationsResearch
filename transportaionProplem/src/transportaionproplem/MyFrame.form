@@ -236,6 +236,7 @@
         <Component class="javax.swing.JRadioButton" name="jRadioButton5">
           <Properties>
             <Property name="text" type="java.lang.String" value="vogial way"/>
+            <Property name="toolTipText" type="java.lang.String" value="not supported yet"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
